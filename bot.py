@@ -88,6 +88,18 @@ async def on_message(msg):
             print("confession #" + numToApprove, "will be approved.")
             confessionChannel = client.get_channel(740256233403056158)
             await confessionChannel.send("Confession received: " + data[int(numToApprove)])
+        elif msg.content.startswith('=github'):
+            await msg.channel.send("jeuseBot's code can be found at: https://github.com/Meme25327/jeuseBot")
+        elif msg.content.startswith('=ftoc'):
+            farenheit = float(args[0])
+            celsius = str(int((farenheit - 32) * 5/9))
+            result = str(farenheit) + " degrees farenheit is equal to " + str(celsius) + " degrees celsius."
+            await msg.channel.send(''.join(result))
+        elif msg.content.startswith("=ctof"):
+            celsius = float(args[0])
+            farenheit = str(int((celsius * 9/5) + 32))
+            result = str(celsius) + " degrees celsius is equal to " + str(farenheit) + " degrees farenheit"
+            msg.channel.send(''.join(result))
         elif msg.content.startswith('= '):
             print("poo")
         else:
