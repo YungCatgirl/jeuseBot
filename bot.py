@@ -36,7 +36,7 @@ async def on_message(msg):
         confessions.close
 
         print("Confession Received")
-        approvalChannel = client.get_channel(772780671634374677)
+        approvalChannel = client.get_channel(772794603954110466)
         fullConfession = "#" + str(count) + ": ", str(msg.content)
         await approvalChannel.send(''.join(fullConfession))
 
@@ -79,14 +79,14 @@ async def on_message(msg):
             elif args[1] == "/":
                 quotient = int(args[0]) / int(args[2])
                 await msg.channel.send('```' + str(quotient) + '```')
-        elif msg.content.startswith("=b"):
+        elif msg.content.startswith("=a"):
             #opens the text document from previous code, stores all confessions in a list
             with open('confessions.txt', 'r') as data:
                 data = data.readlines()
 
             numToApprove = splitMsg.pop(1)
             print("confession #" + numToApprove, "will be approved.")
-            confessionChannel = client.get_channel(740256233403056158)
+            confessionChannel = client.get_channel(772794910826430494)
             await confessionChannel.send("Confession received: " + data[int(numToApprove)])
         elif msg.content.startswith('=github'):
             await msg.channel.send("jeuseBot's code can be found at: https://github.com/Meme25327/jeuseBot")
