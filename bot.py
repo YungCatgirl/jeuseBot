@@ -1,8 +1,11 @@
 import os
 import random
 import discord
-import json
 from dotenv import load_dotenv
+import string
+from googlesearch import search
+from bs4 import BeautifulSoup
+import requests
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -25,15 +28,10 @@ async def on_message(msg):
     if isinstance(msg.channel, discord.channel.DMChannel):
 
         #stores confessions in a seperate text document
-        confessions = open('confessions.txt', 'r')
-        count = 0
-        for line in confessions:
-            count += 1
-
-        confessions = open('confessions.txt', 'a+')
-        confessions.write(str(msg.content))
-        confessions.write("\n")
-        confessions.close
+        with open("confessions.txt", "r+") as file:
+            count = len(file.readlines())
+            file.write(msg.content + "\n")
+            file.close()
 
         print("Confession Received")
         approvalChannel = client.get_channel(772794603954110466)
@@ -45,7 +43,7 @@ async def on_message(msg):
         if msg.content.startswith('=ping'): #ping command
             await msg.channel.send('Pong!')
         elif msg.content.startswith('=help'): #help command
-            await msg.channel.send('jeuseBot\'s help menu can be found at: http://jb.joemama.site')
+            await msg.channel.send('jeuseBot\'s help menu can be found at: http://meme25327.github.io/jeuseBot')
         elif msg.content.startswith('=sunglasses'): #sunglasses command
             if msg.author.id == 258582004738555904:
                 await msg.channel.send("<@258582004738555904> is SO FUCKING COOL. All the ladies fall for him wherever he goes. He is super cool and super smart and super amazing and is the perfect specimen of human being. I really fucking love him because he is so cool and he also made me so that makes him EXTRA COOL!!!!!!!!!!!!!!!!!")
@@ -67,18 +65,15 @@ async def on_message(msg):
             else:
                 await msg.channel.send(random.randint(0, 10))
         elif msg.content.startswith("=math") or msg.content.startswith("=calc") or msg.content.startswith("=calculate") or msg.content.startswith("=maths"):
-            if args[1] == "+":
-                sumOfNum = int(args[0]) + int(args[2])
-                await msg.channel.send('```' + str(sumOfNum) + '```') #theres probably a better way to format these answers
-            elif args[1] == "-":
-                difference = int(args[0]) - int(args[2])
-                await msg.channel.send('```' + str(difference) + '```')
-            elif args[1] == "*":
-                result = int(args[0]) * int(args[2])
-                await msg.channel.send('```' + str(result) + '```')
-            elif args[1] == "/":
-                quotient = int(args[0]) / int(args[2])
-                await msg.channel.send('```' + str(quotient) + '```')
+            if len(args) > 50:
+                await msg.channel.send("There's too many numbers!")
+            else:
+                for character in list(args):
+                    if character in [string.ascii_letters, '[', ']', '{', '}', ',' , '#'] or character in [letter for letter in string.ascii_letters]:
+                        break
+                    else:
+                        answer = eval(str(''.join(args)))
+                await msg.channel.send('```' + str(answer) + '```')
         elif msg.content.startswith("=a"):
             #opens the text document from previous code, stores all confessions in a list
             with open('confessions.txt', 'r') as data:
@@ -102,6 +97,33 @@ async def on_message(msg):
             msg.channel.send(''.join(result))
         elif msg.content.startswith('= '):
             print("poo")
+        elif msg.content.startswith('=g') or msg.content.startswith('=google'):
+            query = ''.join(args)
+
+            if len(query) == 0:
+                await msg.channel.send("No query given")
+                return
+
+            print("google search requested: " + query)
+
+            embed = discord.Embed(title = "Search Results")
+            num = 0
+
+            headers = {'User-Agent': 'Mozilla/5.0'}
+            
+            for results in search(query, num = 1, stop = 3, pause = 1, tld = "co.in"):
+                print(results)
+                num += 1
+                reqs = requests.get(results)
+                soup = BeautifulSoup(reqs.text, 'html.parser')
+                siteTitle = ''
+                for title in soup.find_all('title'): 
+                    siteTitle = title.get_text()
+                name = str(num) + ": " + str(siteTitle)
+                embed.add_field(name = name, value = results, inline = False)
+
+            await msg.channel.send(embed = embed)
+
         else:
             await msg.channel.send('Command not recognized. Try =help!')
 
