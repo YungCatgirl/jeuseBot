@@ -6,6 +6,8 @@ import string
 from googlesearch import search
 from bs4 import BeautifulSoup
 import requests
+from youtubesearchpython import SearchVideos, Search
+from youtubesearchpython.internal.constants import ResultMode
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -43,7 +45,7 @@ async def on_message(msg):
         if msg.content.startswith('=ping'): #ping command
             await msg.channel.send('Pong!')
         elif msg.content.startswith('=help'): #help command
-            await msg.channel.send('jeuseBot\'s help menu can be found at: http://meme25327.github.io/jeuseBot')
+            await msg.channel.send('jeuseBot\'s help menu can be found at: http://jb.joemama.site')
         elif msg.content.startswith('=sunglasses'): #sunglasses command
             if msg.author.id == 258582004738555904:
                 await msg.channel.send("<@258582004738555904> is SO FUCKING COOL. All the ladies fall for him wherever he goes. He is super cool and super smart and super amazing and is the perfect specimen of human being. I really fucking love him because he is so cool and he also made me so that makes him EXTRA COOL!!!!!!!!!!!!!!!!!")
@@ -123,7 +125,18 @@ async def on_message(msg):
                 embed.add_field(name = name, value = results, inline = False)
 
             await msg.channel.send(embed = embed)
-
+        elif msg.content.startswith('=yt') or msg.content.startswith('=youtube'):
+            query = ''.join(args)
+            results = Search(query, limit = 1)
+            info = results.result(mode = ResultMode.dict)
+            embed = discord.Embed(title = 'YouTube Results')
+            # print(info)
+            print("--------------------------------------------------------------------------------------------------------------")
+            title = info['result'][0]['title']
+            url = info['result'][0]['link']
+            type = info['result'][0]['type']
+            video = '**', title, '**', ' (', type, ')', ':' '\n', url
+            await msg.channel.send(''.join(video))
         else:
             await msg.channel.send('Command not recognized. Try =help!')
 
