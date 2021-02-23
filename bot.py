@@ -45,7 +45,7 @@ async def on_message(msg):
         if msg.content.startswith('=ping'): #ping command
             await msg.channel.send('Pong!')
         elif msg.content.startswith('=help'): #help command
-            await msg.channel.send('jeuseBot\'s help menu can be found at: http://jb.joemama.site')
+            await msg.channel.send('jeuseBot\'s help menu can be found at: i did not manage to fix my fucking stupid little bot. the site fucking expired, yet i refused to fix the URL. i am a stupid bitch.')
         elif msg.content.startswith('=sunglasses'): #sunglasses command
             if msg.author.id == 258582004738555904:
                 await msg.channel.send("<@258582004738555904> is SO FUCKING COOL. All the ladies fall for him wherever he goes. He is super cool and super smart and super amazing and is the perfect specimen of human being. I really fucking love him because he is so cool and he also made me so that makes him EXTRA COOL!!!!!!!!!!!!!!!!!")
@@ -58,14 +58,14 @@ async def on_message(msg):
                 await msg.channel.send("Your avatar: " + str(msg.author.avatar_url))
             else:
                 mentioned = msg.mentions[0]
-                await msg.channel.send("<@" + str(mentioned.id) + ">\'s avatar is: " + str(mentioned.avatar_url))
+                await msg.channel.send( "`" + str(mentioned. + "`" + "\'s avatar is: " + str(mentioned.avatar_url))
         elif msg.content == '=fuck you': #insult command
             await msg.channel.send("Ay fuck you too, buddy")
         elif msg.content.startswith("=random"): #rng command
             if args:
                 await msg.channel.send(random.randint(0, int(args[0])))
             else:
-                await msg.channel.send(random.randint(0, 10))
+                await msg.channel.send("Random number between 0-10: " + random.randint(0, 10))
         elif msg.content.startswith("=math") or msg.content.startswith("=calc") or msg.content.startswith("=calculate") or msg.content.startswith("=maths"):
             if len(args) > 50:
                 await msg.channel.send("There's too many numbers!")
@@ -76,6 +76,8 @@ async def on_message(msg):
                     else:
                         answer = eval(str(''.join(args)))
                 await msg.channel.send('```' + str(answer) + '```')
+
+
         elif msg.content.startswith("=a"):
             #opens the text document from previous code, stores all confessions in a list
             with open('confessions.txt', 'r') as data:
@@ -98,7 +100,7 @@ async def on_message(msg):
             result = str(celsius) + " degrees celsius is equal to " + str(farenheit) + " degrees farenheit"
             msg.channel.send(''.join(result))
         elif msg.content.startswith('= '):
-            print("poo")
+            return
         elif msg.content.startswith('=g') or msg.content.startswith('=google'):
             query = ''.join(args)
 
